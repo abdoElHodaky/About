@@ -56,7 +56,7 @@ class Trans{
 }
 
 class Chain{
-  
+  maxTrans=2
   blocks=[]
   add(b){this.blocks.push(b)}
   getlast(){
@@ -82,7 +82,7 @@ class Chain{
     let trans=new Trans(from,to,amount)
     block=this.getlast()
     if (block.type!="initial"){
-       if(block.trans.length==2)
+       if(block.trans.length==this.maxTrans)
         {
           this.createblock([],block.hash)
           
