@@ -65,8 +65,12 @@ class Chain{
    createintial()
    {
     let block=new Block([])
-     block.type="intial"
+     block.type="initial"
      this.add(block)
+   }
+   createblock(trans,hash){
+     this.add(
+       new Block([],hash))
    }
    
    contains(hash){
@@ -77,26 +81,19 @@ class Chain{
   addtrans(block,from="",to="", amount=0){
     let trans=new Trans(from,to,amount)
     block=this.getlast()
-    if (block.type!="intial" ){
+    if (block.type!="initial"){
        if(block.trans.length==2)
         {
-          block=new Block(block.trans,block.hash)
-          this.add(block)
-         
+          this.createblock([],block.hash)
           
         }
-        //this.getlast().addtrans(trans)
         
-   
-      
+        //this.getlast().addtrans(trans)
   }
-  else{
-    let b=new Block([],block.hash)
-    //b.addtrans(new Trans(from,to, amount))
-    this.add(b)
+  if(block.type=="initial"){
+    this.createblock([],block.hash)
    }
-   //block=this.getlast()
-   //block.addtrans(new Trans(from,to, amount ))
+   
    this.getlast().addtrans(trans)
    
     
@@ -111,7 +108,10 @@ chain.addtrans(chain.getlast(),from="7",to="9",amount=1000)
 chain.addtrans(chain.getlast(),from="9",to="8",
 amount=300)
 chain.addtrans(chain.getlast(),from="9",to="19",amount=200)
-chain.addtrans(chain.getlast(),from="5",to="8", amount=500)
+chain.addtrans(chain.getlast(),
+from="5",to="8",
+amount=500)
+
 chain.blocks.map(b=>{
   
   console.log(b)
