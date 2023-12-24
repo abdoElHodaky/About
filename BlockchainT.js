@@ -75,25 +75,29 @@ class Chain{
    }
    
   addtrans(block,from="",to="", amount=0){
+    let trans=new Trans(from,to,amount)
     block=this.getlast()
-    if (block.type!="intial" && block.trans.length==0){
-        block=new Block(block.trans,block.hash)
-        this.add(block)
-      
-    block.addtrans(new Trans(from,to, amount ))
-      
+    if (block.type!="intial" ){
+       if(block.trans.length==2)
+        {
+          block=new Block(block.trans,block.hash)
+          this.add(block)
+         
+          
+        }
+        //this.getlast().addtrans(trans)
         
    
       
   }
   else{
     let b=new Block([],block.hash)
-    b.addtrans(new Trans(from,to, amount))
+    //b.addtrans(new Trans(from,to, amount))
     this.add(b)
    }
    //block=this.getlast()
    //block.addtrans(new Trans(from,to, amount ))
-  // this.getlast().addtrans(new Trans(from,to, amount))
+   this.getlast().addtrans(trans)
    
     
   }
