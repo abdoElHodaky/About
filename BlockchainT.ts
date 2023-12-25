@@ -13,9 +13,8 @@ class Block{
   }
   addtrans(trans){
    
-  this.trans.push(trans)
-  //this.ghash()
-  //trans.setblchash(this.hash)
+   this.trans.push(trans)
+   this.ghash()
     
     
   }
