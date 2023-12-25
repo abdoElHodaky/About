@@ -120,7 +120,7 @@ class Explorer {
   }
   getTrans(txhash){
     let blocks=this.chain.blocks;
-  //  blocks=blocks.slice(1,blocks.length)
+    blocks=blocks.slice(1,blocks.length)
     return blocks.filter(b=>{
       b.trans.find(t=>{
         return (t.hash=txhash);
