@@ -34,7 +34,10 @@ class Transfer {
       this.chain=chain
   }
   transfer(amount){
-      chain.addtrans(chain.getlast(),
+      if ((chain.checkAddress(this.from.address)
+          &&(chain.checkAddress(this.to.address))
+           {
+            chain.addtrans(chain.getlast(),
       this.from.address,
       this.to.address,
       amount               
@@ -43,6 +46,10 @@ class Transfer {
       this.timestamp=Date.now()
       this.from.balance-=amount
       this.to.balance+=amount
+      }
+      else{
+          console.log("check addresses")
+      }
   }
    gettimestamp (){return this.timestamp;}
 
@@ -125,6 +132,9 @@ class Chain{
       console.log(this.maxTrans)
   }
   add(b){this.blocks.push(b);}
+  checkAddress(address){
+     return this.addresses.include(address)
+  }
   getfee(){return this.fee;}
   getlast(){
     return this.blocks[this.blocks.length-1];
@@ -163,10 +173,11 @@ class Chain{
    
    this.getlast().addtrans(trans);
    Block.updatetransSblchash(this.getlast())
-   
-   
-    
   }
+ createAddress(user:string){
+    let address=new Address()
+    this.addresses.push(address.address)
+ }
 }
 
 class Explorer {
