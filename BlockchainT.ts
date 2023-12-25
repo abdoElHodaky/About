@@ -39,6 +39,7 @@ class Transfer {
       this.to.address,
       amount               
        )
+      amount-=chain.getfee()
       this.timestamp=Date.now()
       this.from.balance-=amount
       this.to.balance+=amount
@@ -116,6 +117,7 @@ class Trans{
 }
 
 class Chain{
+ private fee=0.00001
  private addresses=[]
  private maxTrans=2 
  public blocks=[]
@@ -123,6 +125,7 @@ class Chain{
       console.log(this.maxTrans)
   }
   add(b){this.blocks.push(b);}
+  getfee(){return this.fee;}
   getlast(){
     return this.blocks[this.blocks.length-1];
    }
