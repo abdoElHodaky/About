@@ -37,6 +37,7 @@ class Trans{
   private amount=0
   private hash="" 
   private timestamp=0
+  private blchash=""
   constructor(from,to,amount){
     this.from=from
     this.to=to
@@ -52,6 +53,8 @@ class Trans{
       .update(b).digest("hex")
     
   }
+  get hash(){return this.hash}
+  setblchash(hash){this.hash=hash)
   
 }
 
@@ -99,6 +102,9 @@ class Chain{
    }
    
    this.getlast().addtrans(trans);
+   this.getlast().ghash()
+   trans.setblchash(this.getlast().hash)
+   
    
     
   }
