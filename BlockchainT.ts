@@ -34,8 +34,8 @@ class Transfer {
       this.chain=chain
   }
   transfer(amount){
-      if ((chain.checkAddress(this.from.address)
-          &&(chain.checkAddress(this.to.address))
+      if ((chain.checkAddress(this.from.address))
+          &&(chain.checkAddress(this.to.address)))
            {
             chain.addtrans(chain.getlast(),
       this.from.address,
@@ -126,6 +126,7 @@ class Trans{
 class Chain{
  private fee=0.00001
  private addresses=[]
+ static address=1
  private maxTrans=2 
  public blocks=[]
   constructor(){
@@ -133,7 +134,7 @@ class Chain{
   }
   add(b){this.blocks.push(b);}
   checkAddress(address){
-     return this.addresses.include(address)
+     return this.addresses.includes(address)
   }
   getfee(){return this.fee;}
   getlast(){
@@ -174,9 +175,13 @@ class Chain{
    this.getlast().addtrans(trans);
    Block.updatetransSblchash(this.getlast())
   }
- createAddress(user:string){
-    let address=new Address()
+ createAddress(user:string=""){
+     
+    let address=new Address(Chain.address.toString())
+    address.setTransfer(this)
     this.addresses.push(address.address)
+    Chain.address+=1
+    return address 
  }
 }
 
@@ -206,26 +211,13 @@ class Explorer {
 }
 const crypt=require("crypto")
 let chain=new Chain()
-let add1=new Address("7")
-let add2=new Address ("8")
-let add3=new Address ("9")
-let add4=new Address("19")
+let add1=chain.createAddress()
+let add2=chain.createAddress()
+let add3=chain.createAddress()
 chain.createintial()
-add1.setTransfer(chain)
-add4.setTransfer(chain)
-add1.transferTo(add4,0)
-add4.transferTo(add1,600)
-console.log(add4,add1)
-
-/*chain.addtrans(chain.getlast(),"7","8",
-100)
-chain.addtrans(chain.getlast(),"7","9",1000)
-chain.addtrans(chain.getlast(),"9","8",
-300)
-chain.addtrans(chain.getlast(),"9","19",200)
-chain.addtrans(chain.getlast(),
-"5","8",500)
-*/
+add1.transferTo(add2,0)
+add3.transferTo(add1,600)
+console.log(add3,add1)
 chain.blocks.map(b=>{
   
   console.log(b)
