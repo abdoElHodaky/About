@@ -1,3 +1,46 @@
+class Address {
+    user:string=""
+    address:string=""
+    balance:number=1000
+    private transfer:Transfer
+    constructor(address,user=""){
+        this.address=address
+        this.user=user
+    }
+    setTransfer(chain){
+        this.transfer=new Transfer(chain)
+    }
+    transferTo(to, amount){
+        this.transfer.from=this
+        this.transfer.to=to
+        //this.transfer.amount=amount
+        this.transfer.transfer(amount)
+    }
+    
+}
+class Transfer {
+ public from:Address=<Address>{}
+ public to:Address=<Address>{}
+  private chain:Chain
+  constructor(chain){
+      this.chain=chain
+  }
+  transfer(amount){
+      chain.addtrans(chain.getlast(),
+      this.from.address,
+      this.to.address,
+      amount               
+       )
+      this.from.balance-=amount
+      this.to.balance+=amount
+  }
+
+    
+}
+
+
+
+
 class Block{
   type=""
   trans=[]
@@ -13,8 +56,8 @@ class Block{
   }
   addtrans(trans){
    
-   this.trans.push(trans)
-   this.ghash()
+  this.trans.push(trans)
+  this.ghash()
     
     
   }
@@ -63,7 +106,7 @@ class Trans{
 }
 
 class Chain{
-
+ private addresses=[]
  private maxTrans=2 
  public blocks=[]
   constructor(){
@@ -120,7 +163,7 @@ class Explorer {
   }
   getTrans(txhash){
     let blocks=this.chain.blocks;
-    blocks=blocks.slice(1,blocks.length)
+  //  blocks=blocks.slice(1,blocks.length)
     return blocks.filter(b=>{
       b.trans.find(t=>{
         return (t.hash=txhash);
@@ -139,8 +182,15 @@ class Explorer {
 }
 const crypt=require("crypto")
 let chain=new Chain()
+let add1=new Address("7")
+let add2=new Address ("8")
+let add3=new Address ("9")
+let add4=new Address("19")
+add1.setTransfer(chain)
 chain.createintial()
-chain.addtrans(chain.getlast(),"7","8",
+console.log(add1)
+
+/*chain.addtrans(chain.getlast(),"7","8",
 100)
 chain.addtrans(chain.getlast(),"7","9",1000)
 chain.addtrans(chain.getlast(),"9","8",
@@ -148,7 +198,7 @@ chain.addtrans(chain.getlast(),"9","8",
 chain.addtrans(chain.getlast(),"9","19",200)
 chain.addtrans(chain.getlast(),
 "5","8",500)
-
+*/
 chain.blocks.map(b=>{
   
   console.log(b)
