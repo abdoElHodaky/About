@@ -54,7 +54,7 @@ class Trans{
     
   }
   get hash(){return this.hash;}
-  setblchash(hash){this.hash=hash);}
+  setblchash(hash){this.hash=hash;}
   
 }
 
