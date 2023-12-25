@@ -1,4 +1,5 @@
 class Address {
+    public transferHistory=[]
     user:string=""
     address:string=""
     balance:number=1000
@@ -15,12 +16,19 @@ class Address {
         this.transfer.to=to
         //this.transfer.amount=amount
         this.transfer.transfer(amount)
+        this.transferHistory.push({
+            from:this.address,
+            to:to.address,
+            timestamp:this.transfer.gettimestamp(),
+            amount:amount
+        })
     }
     
 }
 class Transfer {
  public from:Address=<Address>{}
  public to:Address=<Address>{}
+ private timestamp=0
   private chain:Chain
   constructor(chain){
       this.chain=chain
@@ -31,9 +39,11 @@ class Transfer {
       this.to.address,
       amount               
        )
+      this.timestamp=Date.now()
       this.from.balance-=amount
       this.to.balance+=amount
   }
+   gettimestamp (){return this.timestamp;}
 
     
 }
@@ -186,9 +196,12 @@ let add1=new Address("7")
 let add2=new Address ("8")
 let add3=new Address ("9")
 let add4=new Address("19")
-add1.setTransfer(chain)
 chain.createintial()
-console.log(add1)
+add1.setTransfer(chain)
+add4.setTransfer(chain)
+add1.transferTo(add4,0)
+add4.transferTo(add1,600)
+console.log(add4,add1)
 
 /*chain.addtrans(chain.getlast(),"7","8",
 100)
