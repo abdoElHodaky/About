@@ -53,8 +53,8 @@ class Trans{
       .update(b).digest("hex")
     
   }
-  get hash(){return this.hash}
-  setblchash(hash){this.hash=hash)
+  get hash(){return this.hash;}
+  setblchash(hash){this.hash=hash);}
   
 }
 
