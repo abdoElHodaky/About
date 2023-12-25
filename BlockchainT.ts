@@ -14,6 +14,8 @@ class Block{
   addtrans(trans){
    
   this.trans.push(trans)
+  //this.ghash()
+  //trans.setblchash(this.hash)
     
     
   }
@@ -27,6 +29,9 @@ class Block{
       .update(b).digest("hex")
     
     
+  }
+  static updatetransSblchash(block){
+   block.trans.map(t=>t.setblchash(block.hash))    
   }
 }
 
@@ -53,8 +58,8 @@ class Trans{
       .update(b).digest("hex")
     
   }
-  get hash(){return this.hash;}
-  setblchash(hash){this.hash=hash;}
+  gethash(){return this.hash;}
+  setblchash(hash){this.blchash=hash;}
   
 }
 
@@ -77,7 +82,7 @@ class Chain{
    }
    createblock(trans,hash){
      this.add(
-       new Block([],hash));
+       new Block(trans,hash));
    }
    
    contains(hash){
@@ -102,8 +107,7 @@ class Chain{
    }
    
    this.getlast().addtrans(trans);
-   this.getlast().ghash()
-   trans.setblchash(this.getlast().hash)
+   Block.updatetransSblchash(this.getlast())
    
    
     
