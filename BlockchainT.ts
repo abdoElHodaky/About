@@ -190,7 +190,7 @@ class Chain{
       import("fs").then(fs=>_fs=fs).catch(console.log)
       _fs.exists("chain.json",exists=>{
           if(exists==false){
-              _fs.writeFile("chain.json",JSON.parse(c),{
+              _fs.writeFile("chain.json",JSON.stringify(c),{
                   encoding:"uft-8"
               },(err)=>{
                   if(err) console.log(err)
