@@ -199,7 +199,8 @@ class Chain{
           }
           else{
               c=JSON.parse(_fs.readFileSync("chain.json"))
-              this=c
+              this.blocks=c.blocks
+              this.addresses=c.addresses
           }
       })
  }
