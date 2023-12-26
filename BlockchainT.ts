@@ -183,6 +183,27 @@ class Chain{
     Chain.address+=1
     return address 
  }
+
+ syncT(){
+      let c=this
+      let _fs
+      import("fs").then(fs=>_fs=fs).catch(console.log)
+      _fs.exists("chain.json",exists=>{
+          if(exists==false){
+              _fs.writeFile("chain.json",JSON.parse(c),{
+                  encoding:"uft-8"
+              },(err)=>{
+                  if(err) console.log(err)
+                  else console.log("done")
+              })
+          }
+          else{
+              c=JSON.parse(_fs.readFileSync("chain.json"))
+              this=c
+          }
+      })
+ }
+    
 }
 
 class Explorer {
