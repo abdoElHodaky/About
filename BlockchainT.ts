@@ -172,6 +172,7 @@ class Chain
     this.createblock([],block.hash);
    }
    this.pending_trans.push(trans)
+   this.confirm()
    //this.getlast().addtrans(trans);
   // Block.updatetransSblchash(this.getlast())
   }
@@ -265,7 +266,6 @@ let add3=chain.createAddress()
 chain.createintial()
 add1.transferTo(add2,0)
 add3.transferTo(add1,600)
-chain.confirm()
 console.log(chain.pending_trans)
 chain.blocks.map(b=>{
   
