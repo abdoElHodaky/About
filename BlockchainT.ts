@@ -90,9 +90,6 @@ class Block{
     
     
   }
-  static updatetransSblchash(block){
-   block.trans.map(t=>t.setblchash(block.hash))    
-  }
 }
 
 
@@ -123,17 +120,22 @@ class Trans{
   
 }
 
-class Chain{
- private fee=0.00001
- private addresses=[]
- static address=1
- private maxTrans=2 
- public blocks=[]
+class Chain
+{
+ private fee:number=0.0001
+ private Supply:number=30*Math.pow(10,20)
+ private address0:string="0".repeat(16)
+ private addresses:string[]=[]
+ static address:number=1
+ private maxTrans:number=2 
+ public blocks:Block[]=[]
+ private pending_trans:Trans[]=[]
   constructor(){
       console.log(this.maxTrans)
+      this.syncT()
   }
-  add(b){this.blocks.push(b);}
-  checkAddress(address){
+  add(b:Block){this.blocks.push(b);}
+  checkAddress(address:string){
      return this.addresses.includes(address)
   }
   getfee(){return this.fee;}
@@ -144,24 +146,21 @@ class Chain{
    {
     let block=new Block([]);
      block.type="initial";
+     block.ghash()
      this.add(block);
    }
-   createblock(trans,hash){
+   createblock(trans:Trans[],hash:string){
      this.add(
        new Block(trans,hash));
    }
    
-   contains(hash){
-    let b=this.blocks.filter(b=>b.prevhash==hash);
-     
-   }
-   
-  addtrans(block,from="",to="", amount=0){
+  addtrans(block:Block,from:string="",to:string="", amount:number=0){
     let trans=new Trans(from,to,amount);
     block=this.getlast();
     if (block.type!="initial"){
        if(block.trans.length==this.maxTrans)
         {
+          this.confirm()
           this.createblock([],block.hash);
           
         }
@@ -171,40 +170,67 @@ class Chain{
   if(block.type=="initial"){
     this.createblock([],block.hash);
    }
-   
-   this.getlast().addtrans(trans);
-   Block.updatetransSblchash(this.getlast())
+   this.pending_trans.push(trans)
+   //this.getlast().addtrans(trans);
+  // Block.updatetransSblchash(this.getlast())
   }
- createAddress(user:string=""){
-     
-    let address=new Address(Chain.address.toString())
+ createAddress(user:string=""):Address {
+    let _address:any={};
+    let address: Address
+    let crypt=require("crypto")
+    let buff=crypt.randomBytes(32)
+    let b=Buffer.concat([buff,Buffer.from(Chain.address.toString())])
+    _address=b.toString("hex")
+         //console.log(_address)
+    address=new Address(_address)
     address.setTransfer(this)
     this.addresses.push(address.address)
     Chain.address+=1
+    console.log(address)
     return address 
+     
  }
-
+ confirm(){
+ let lastblock= this.getlast()
+ let trans=this.pending_trans
+/* for(var i of trans){
+  lastblock.trans.push(i)
+ }*/
+  trans.map(t=>{
+   this.lastblock().addtrans(t)
+  })
+  this.lastblock().ghash()
+  this.valid()
+ }
  syncT(){
-      let c=this
-      let _fs
-      import("fs").then(fs=>_fs=fs).catch(console.log)
-      _fs.exists("chain.json",exists=>{
+      let c:Chain =this
+      //let _fs:any;
+      import("fs").then(fs=>{
+
+        fs.exists("chain.json",(exists:boolean)=>{
           if(exists==false){
-              _fs.writeFile("chain.json",JSON.stringify(c),{
-                  encoding:"uft-8"
-              },(err)=>{
+              fs.writeFile("chain.json",JSON.stringify(c),{
+                  encoding:"utf-8"
+              },(err:any)=>{
                   if(err) console.log(err)
                   else console.log("done")
               })
           }
           else{
-              c=JSON.parse(_fs.readFileSync("chain.json"))
+              c=JSON.parse(JSON.stringify(fs.readFileSync("chain.json")))
               this.blocks=c.blocks
               this.addresses=c.addresses
           }
-      })
+        })}).catch(console.log)
  }
-    
+ vaild(){
+  for(var i in this.blocks){
+   if(this.blocks[i+1].prevhash==this.blocks[i])
+    return true
+   else 
+    return false 
+  }
+ }
 }
 
 class Explorer {
