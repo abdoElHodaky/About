@@ -99,7 +99,7 @@ class Trans{
   private amount=0
   private hash="" 
   private timestamp=0
-  private blchash=""
+  //private blchash=""
   constructor(from,to,amount){
     this.from=from
     this.to=to
@@ -116,7 +116,7 @@ class Trans{
     
   }
   gethash(){return this.hash;}
-  setblchash(hash){this.blchash=hash;}
+  //setblchash(hash){this.blchash=hash;}
   
 }
 
@@ -129,9 +129,9 @@ class Chain
  static address:number=1
  private maxTrans:number=2 
  public blocks:Block[]=[]
- private pending_trans:Trans[]=[]
+ public pending_trans:Trans[]=[]
   constructor(){
-      console.log(this.maxTrans)
+      //console.log(this.maxTrans)
       this.syncT()
   }
   add(b:Block){this.blocks.push(b);}
@@ -160,9 +160,10 @@ class Chain
     if (block.type!="initial"){
        if(block.trans.length==this.maxTrans)
         {
-          this.confirm()
           this.createblock([],block.hash);
-          
+        }
+        else{
+            this.confirm()
         }
         
         //this.getlast().addtrans(trans)
@@ -186,20 +187,19 @@ class Chain
     address.setTransfer(this)
     this.addresses.push(address.address)
     Chain.address+=1
-    console.log(address)
+    //console.log(address)
     return address 
      
  }
  confirm(){
- let lastblock= this.getlast()
  let trans=this.pending_trans
 /* for(var i of trans){
   lastblock.trans.push(i)
  }*/
   trans.map(t=>{
-   this.lastblock().addtrans(t)
+   this.getlast().addtrans(t)
   })
-  this.lastblock().ghash()
+  this.getlast().ghash()
   this.valid()
  }
  syncT(){
@@ -223,9 +223,9 @@ class Chain
           }
         })}).catch(console.log)
  }
- vaild(){
-  for(var i in this.blocks){
-   if(this.blocks[i+1].prevhash==this.blocks[i])
+ valid(){
+  for(var i=1;i<this.blocks.length;i++){
+   if(this.blocks[i-1].prevhash==this.blocks[i].hash)
     return true
    else 
     return false 
@@ -265,7 +265,8 @@ let add3=chain.createAddress()
 chain.createintial()
 add1.transferTo(add2,0)
 add3.transferTo(add1,600)
-console.log(add3,add1)
+chain.confirm()
+console.log(chain.pending_trans)
 chain.blocks.map(b=>{
   
   console.log(b)
