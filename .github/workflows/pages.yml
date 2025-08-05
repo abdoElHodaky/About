@@ -1,5 +1,6 @@
 name: directory-listing
-on: [push]
+on: 
+  workflow_dispatch:
 
 jobs:
   pages-directory-listing:
