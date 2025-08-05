@@ -20,14 +20,7 @@ jobs:
         with:
           path: './'   
 
-      - name: Commit and Push
-        uses: GuillaumeFalourd/git-commit-push@v1.3
-        with:
-          commit_message: "Push changes"
-          target_branch: "main"
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-          
-        
+      
   
   deploy:
     needs: pages-directory-listing
