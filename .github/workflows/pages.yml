@@ -24,7 +24,7 @@ jobs:
         uses: GuillaumeFalourd/git-commit-push@v1.3
         with:
           commit_message: "Push changes"
-          target_branch: ${{github.ref}}
+          target_branch: "main"
           access_token: ${{ secrets.GITHUB_TOKEN }}
           
         
