@@ -18,7 +18,15 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3.0.1
         with:
-          path: './'      # upload generated folder
+          path: './'   
+
+      - name: Commit and Push
+        uses: GuillaumeFalourd/git-commit-push@v1.3
+        with:
+          commit_message: "Push changes"
+          target_branch: ${{github.ref}}
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          
         
   
   deploy:
@@ -38,10 +46,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4.0.0
-
-      - name: Commit and Push
-        uses: GuillaumeFalourd/git-commit-push@v1.3
-        with:
-          commit_message: "Push changes"
-          target_branch: ${{github.ref}}
-          access_token: ${{ secrets.GITHUB_TOKEN }}
